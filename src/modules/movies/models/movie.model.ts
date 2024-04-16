@@ -1,4 +1,5 @@
-export class CreateMovieDto {
+export interface IMovieModel {
+  userId: string;
   title: string;
   released: Date;
   director: string;

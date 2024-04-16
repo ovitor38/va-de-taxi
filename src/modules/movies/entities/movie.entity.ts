@@ -25,14 +25,14 @@ export class MovieEntity {
   @Column({ length: 200 })
   title: string;
 
-  @Column({ name: 'released_date' })
+  @Column({ name: 'release_date' })
   released: Date;
 
   @Column()
   director: string;
 
   @Column({ type: 'time' })
-  duration: string;
+  duration: Date;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: string;
