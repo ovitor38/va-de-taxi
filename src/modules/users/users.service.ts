@@ -30,8 +30,11 @@ export class UsersService {
 
       return await this.userRepository.save(user);
     } catch (error) {
-      if (error.code == 23505 && error.constraint == 'users_email_key')
+      if (error.code == 23505 && error.constraint == 'users_email_key') {
         throw new ForbiddenException(error.message.replace(/\\|"/g, ''));
+      }
+
+      throw new InternalServerErrorException(error.message);
     }
   }
 
