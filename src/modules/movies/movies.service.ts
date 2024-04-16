@@ -1,10 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MovieEntity } from './entities/movie.entity';
 import { EntityNotFoundError, Repository } from 'typeorm';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { IMovieModel } from './models/movie.model';
 import { messagesErrorHelper } from 'src/helpers/messages.helper';
+import { IMoviesResponseModel } from './models/movies-response.model';
+import { UpdateMovieDto } from './dto/update-movie.dto';
 
 @Injectable()
 export class MoviesService {
@@ -20,16 +26,23 @@ export class MoviesService {
     return await this.movieRepository.save(movieData);
   }
 
-  findAll() {
-    return `This action returns all movies`;
+  async findAll(): Promise<IMoviesResponseModel> {
+    try {
+      const movies = await this.movieRepository.find();
+
+      const response = { totalMovies: movies.length, movies };
+
+      return response;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<MovieEntity> {
     try {
-      const movie = await this.movieRepository.findOneOrFail({
+      return await this.movieRepository.findOneOrFail({
         where: { id },
       });
-      return movie;
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
         throw new NotFoundException({
@@ -37,15 +50,21 @@ export class MoviesService {
         });
       }
 
-      throw error;
+      throw new InternalServerErrorException(error.message);
     }
   }
 
-  update(id: number) {
-    return `This action updates a #${id} movie`;
+  async update(id: string, updateMovieDto: UpdateMovieDto) {
+    try {
+      await this.findOne(id);
+
+      return await this.movieRepository.update(id, updateMovieDto);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} movie`;
+  async remove(id: string) {
+    return await this.movieRepository.softDelete(id);
   }
 }

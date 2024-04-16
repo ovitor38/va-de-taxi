@@ -8,9 +8,11 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
+
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { AuthGuard } from '../auth/auth.guard';
+import { UpdateMovieDto } from './dto/update-movie.dto';
 @UseGuards(AuthGuard)
 @Controller('api/movies')
 export class MoviesController {
@@ -32,12 +34,12 @@ export class MoviesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string) {
-    return this.moviesService.update(+id);
+  update(@Param('id') id: string, @Body() updateMovieDto: UpdateMovieDto) {
+    return this.moviesService.update(id, updateMovieDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.moviesService.remove(+id);
+    return this.moviesService.remove(id);
   }
 }
