@@ -5,6 +5,7 @@ import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { UsersModule } from '../users/users.module';
 import { ConfigModule } from '@nestjs/config';
+import { HasherAdapterModule } from 'src/adapters/hasher/hasher.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ConfigModule } from '@nestjs/config';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '2h' },
     }),
+    HasherAdapterModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],

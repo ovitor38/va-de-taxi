@@ -6,22 +6,25 @@ import {
 } from '@nestjs/common';
 import { EntityNotFoundError, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
+import { HasherAdapter } from 'src/adapters/hasher/hasher.adapter';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
+    private hasherAdapter: HasherAdapter,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
     try {
-      const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+      const hashedPassword = await this.hasherAdapter.hash(
+        createUserDto.password,
+      );
 
       const user = { ...createUserDto, password: hashedPassword };
 
