@@ -18,8 +18,8 @@ async function bootstrap() {
     )
     .setVersion('1.0')
     .addTag('users')
-    // .addTag('auth')
-    // .addBearerAuth()
+    .addTag('auth')
+    .addBearerAuth()
     // .addTag('movies')
     .build();
 
