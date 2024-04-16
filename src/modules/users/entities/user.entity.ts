@@ -1,5 +1,4 @@
 import { IsUUID } from 'class-validator';
-import { MovieEntity } from 'src/modules/movies/entities/movie.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -8,7 +7,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  OneToMany,
 } from 'typeorm';
 
 @Entity({ name: 'users' })
@@ -35,9 +33,6 @@ export class UserEntity {
 
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: string;
-
-  @OneToMany(() => MovieEntity, (movie) => movie.user)
-  movie: MovieEntity[];
 
   constructor(user?: Partial<UserEntity>) {
     this.id = user?.id;
