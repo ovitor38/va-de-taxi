@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsUUID } from 'class-validator';
 import {
   Entity,
@@ -13,16 +14,20 @@ import {
 export class UserEntity {
   @PrimaryGeneratedColumn()
   @IsUUID()
+  @ApiProperty()
   @Generated('uuid')
   id: string;
 
   @Column({ length: 200 })
+  @ApiProperty()
   name: string;
 
   @Column({ length: 100, unique: true })
+  @ApiProperty()
   email: string;
 
   @Column()
+  @ApiProperty()
   password: string;
 
   @CreateDateColumn({ name: 'created_at' })
