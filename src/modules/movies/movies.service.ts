@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MovieEntity } from './entities/movie.entity';
-import { Repository } from 'typeorm';
+import { EntityNotFoundError, Repository } from 'typeorm';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { IMovieModel } from './models/movie.model';
+import { messagesErrorHelper } from 'src/helpers/messages.helper';
 
 @Injectable()
 export class MoviesService {
@@ -11,9 +12,8 @@ export class MoviesService {
     @InjectRepository(MovieEntity)
     private movieRepository: Repository<MovieEntity>,
   ) {}
-  async create(userId: string, createMovieDto: CreateMovieDto) {
+  async create(createMovieDto: CreateMovieDto) {
     const movieData: IMovieModel = {
-      userId,
       ...createMovieDto,
     };
 
@@ -24,8 +24,21 @@ export class MoviesService {
     return `This action returns all movies`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} movie`;
+  async findOne(id: string) {
+    try {
+      const movie = await this.movieRepository.findOneOrFail({
+        where: { id },
+      });
+      return movie;
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        throw new NotFoundException({
+          message: messagesErrorHelper.MOVIE_NOT_FOUND,
+        });
+      }
+
+      throw error;
+    }
   }
 
   update(id: number) {

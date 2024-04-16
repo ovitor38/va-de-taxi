@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 
 import { UsersService } from '../users/users.service';
 import { HasherAdapter } from 'src/adapters/hasher/hasher.adapter';
-import { messagesHelper } from 'src/helpers/messages.error';
+import { messagesErrorHelper } from 'src/helpers/messages.helper';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +26,7 @@ export class AuthService {
 
     if (!samePassword) {
       throw new UnauthorizedException({
-        message: messagesHelper.PASSWORD_OR_EMAIL_INVALID,
+        message: messagesErrorHelper.PASSWORD_OR_EMAIL_INVALID,
       });
     }
 

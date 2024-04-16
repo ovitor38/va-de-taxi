@@ -7,23 +7,18 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { AuthGuard } from '../auth/auth.guard';
-import { Request } from 'express';
 @UseGuards(AuthGuard)
 @Controller('api/movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
-  //@UseGuards(AuthGuard)
   @Post()
-  create(@Req() req: Request, @Body() createMovieDto: CreateMovieDto) {
-    const userId: string = req['user'].sub;
-
-    return this.moviesService.create(userId, createMovieDto);
+  create(@Body() createMovieDto: CreateMovieDto) {
+    return this.moviesService.create(createMovieDto);
   }
 
   @Get()
@@ -33,7 +28,7 @@ export class MoviesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.moviesService.findOne(+id);
+    return this.moviesService.findOne(id);
   }
 
   @Patch(':id')
