@@ -11,12 +11,14 @@ import { IMovieModel } from './models/movie.model';
 import { messagesErrorHelper } from 'src/helpers/messages.helper';
 import { IMoviesResponseModel } from './models/movies-response.model';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { RedisCacheService } from '../cache/redis/redis.service';
 
 @Injectable()
 export class MoviesService {
   constructor(
     @InjectRepository(MovieEntity)
     private movieRepository: Repository<MovieEntity>,
+    private redisCache: RedisCacheService,
   ) {}
   async create(createMovieDto: CreateMovieDto) {
     const movieData: IMovieModel = {
@@ -28,9 +30,16 @@ export class MoviesService {
 
   async findAll(): Promise<IMoviesResponseModel> {
     try {
+      const chachedMoviesData = await this.redisCache.get('movies');
+
+      if (chachedMoviesData) {
+        return JSON.parse(chachedMoviesData);
+      }
       const movies = await this.movieRepository.find();
 
       const response = { totalMovies: movies.length, movies };
+
+      await this.redisCache.set('movies', JSON.stringify(response), 'EX', 15);
 
       return response;
     } catch (error) {
