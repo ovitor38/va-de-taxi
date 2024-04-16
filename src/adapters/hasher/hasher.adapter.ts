@@ -5,7 +5,6 @@ import * as bcrypt from 'bcrypt';
 export class HasherAdapter {
   async compare(password: string, hashedPassword: string): Promise<boolean> {
     const result = await bcrypt.compare(password, hashedPassword);
-    console.log(result);
     return result;
   }
 
