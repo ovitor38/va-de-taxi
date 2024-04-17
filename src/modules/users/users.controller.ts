@@ -37,7 +37,7 @@ export class UsersController {
 
   @Patch('')
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Update the user with the referenced id' })
+  @ApiOperation({ summary: 'Update the authenticated user' })
   @ApiBearerAuth()
   async update(@Req() req: Request, @Body() updateUserDto: UpdateUserDto) {
     const id: string = req['user'].sub;
@@ -45,11 +45,12 @@ export class UsersController {
     return await this.usersService.update(id, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete('')
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Delete the user with the referenced id' })
+  @ApiOperation({ summary: 'Delete the authenticated user' })
   @ApiBearerAuth()
-  remove(@Param('id') id: string) {
+  remove(@Req() req: Request) {
+    const id: string = req['user'].sub;
     return this.usersService.remove(id);
   }
 }
