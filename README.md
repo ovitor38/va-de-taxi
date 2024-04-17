@@ -22,14 +22,41 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+# MKS Backend Challene, este é o meu resultado do desafio proposto pela MKS. Essa API consiste em sistema CRUD de filmes. Nele foram utilizadas as seguintes tecnologias: Nestjs, TypeORM, Swagger, Docker, Redis e PostgreSQL.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Descrição 
+Nessa API foram aplicados conceitos principais do SOLID, para que possa ser de fácil sua mantenabilidade e escalabilidade. Buscando sempre pelo melhor padrão utilizado na área de desenvolvimento
+
+### Arquitetura
+O projeto segue a famosa arquitetura MVC, com a CLI do NESTJs a criação desse padrão fica super ágil e isso bastante utilizado nesse projeto 
+
+### Funcionalidaes
+
+-**Autenticação de Usuários**
+  - A autenticação é feita através do email e senha do usuário, com isso a API é capaz de retornar um token JWT que lhe garantira acesso as demais funcionalidades
+
+-**Crud Usários**
+  - A API permite a criação de usuários requirindo: nome, email e uma senha, nas funcionalidades da rota de usuários todas as rotas são protegidas por autenficação JWT (exceto a de criação), essa proteção serve que apenas o usuário autenticado modifique ou exclua os seus dados
+
+-**CRUD Filmes**
+  - É possível criar, ler, atualizar e excluir filmes através da API de forma simples. Um registro consiste em nome, duração, direção e ano de lançamento. Para garantir a segurança e seguindo um dos requistos desse desafio todas as rotas de filmes estão protegidas por JWT
+
+
+### Tecnologias Complementares
+
+- **Docker:** O projeto utiliza Docker, as imagens tanto do Postgres quanto do Redis estão contidas nele. Dessa forma o projeto pode ser facilmente executado por outros desenvolvedores sendo desnecessários a instalação desses aplicativos em seu ambiente de desenvolvimento
+- **Commit-lint:** Para garantir uma padronização nos commit foi utilizado está lib que garante que não possa ser feitos commit que fujam do padrão estabelicidos nas configurações prévias estabelecidas 
+- **Swagger:** Utilizado para realizar a documentação de todos os endpoint da aplicação
+- **Redis:** Como maneira de melhoria na performance foi utilizado Redis para buscar dados que são frequentemente utilizados, fazendo com a API não demande tantas requisições ao banco de dados, fazendo com que tenha seu desempenho melhorado 
 
 ## Installation
 
 ```bash
 $ yarn install
+```
+### Obs: Caso esteja rodando a aplicação pela primeira vez e tenha intuito de realizar novos commits é necessário rodar o comando, a fim de garantir que os hooks sejam executados
+```bash
+$ yarn prepare
 ```
 
 ## Running the app
@@ -44,30 +71,36 @@ $ yarn run start:dev
 # production mode
 $ yarn run start:prod
 ```
+## Desenvolvimento e Experiência
+Durante o desenvolvimento desse projeto houve muito comprometimento de minha parte, já estava bem familiarizado com a maioria das tecnologias principalmente Typescript e Postgres. Uma novidade para mim foi utilizar o Redis como sistema de cache já que nunca havia usado anteriormente em meus projetos, entretando com algumas horas dedicado a documentação pude aplicar facilmente.
+Infelizmente não houve tempo hábil para concluir os testes unitários e de integração, devido isso removi todos os arquivos para esse propósito. Entretanto todos os endpoints foram devidamente validados via Postman.
 
-## Test
+TypeScript, swagger, docker e Postgres são ferramentas que eu utilizava sempre na minha antiga experiência profissional. Já o NestJs, venho estudando ele há algum tempo (cerca de 2 meses) e o Redis é uma novidade para mim, porém foi algo simples de se utilizar
 
+## Documentação no Swagger
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+http://localhost:8080/api/swagger
 ```
 
-## Support
+## Meus contatos
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- Author - Victor Oliveira
+- Linkedin - [Victor Oliveira](https://www.linkedin.com/in/victor-oliveira-7a5a94103/)
+- GitHub - [GitHub](https://github.com/ovitor38)
+- Discord ID - victoroliveira7393
+- WhatsApp - [Victor Oliveira](https://wa.me/qr/LPRKOV2PPKMDC1)
 
-## Stay in touch
+Quaisquer dúvidas estou a disposição 😃
+##  Tecnologias deste projeto
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+[![Node.js](https://img.shields.io/badge/-Node.js-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/-TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![NestJS](https://img.shields.io/badge/-NestJS-E0234E?style=flat-square&logo=nestjs&logoColor=white)](https://nestjs.com/)
+[![TypeORM](https://img.shields.io/badge/-TypeORM-F37626?style=flat-square&logo=typeorm&logoColor=white)](https://typeorm.io/)
+[![Swagger](https://img.shields.io/badge/-Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=black)](https://swagger.io/)
+[![Docker](https://img.shields.io/badge/-Docker-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Redis](https://img.shields.io/badge/-Redis-DC382D?style=flat-square&logo=redis&logoColor=white)](https://redis.io/)
+[![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-336791?style=flat-square&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![git](https://img.shields.io/badge/-git-F05032?style=flat-square&logo=git&logoColor=white)](https://git-scm.com/)
+[![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/)
+[![Husky 🐶]](https://typicode.github.io/husky/)
