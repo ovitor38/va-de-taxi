@@ -7,12 +7,14 @@ import {
   Delete,
   Patch,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
+import { Request } from 'express';
 
 @Controller('api/users')
 @ApiTags('users')
@@ -33,11 +35,13 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Update the user with the referenced id' })
   @ApiBearerAuth()
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Req() req: Request, @Body() updateUserDto: UpdateUserDto) {
+    const id: string = req['user'].sub;
+
     return await this.usersService.update(id, updateUserDto);
   }
 
