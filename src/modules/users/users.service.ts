@@ -69,16 +69,24 @@ export class UsersService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<UserEntity> {
-    const user = await this.findOne(id);
+    try {
+      const user = await this.findOne(id);
 
-    this.userRepository.merge(user, updateUserDto);
+      this.userRepository.merge(user, updateUserDto);
 
-    return await this.userRepository.save(user);
+      return await this.userRepository.save(user);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   async remove(id: string) {
-    await this.findOne(id);
+    try {
+      await this.findOne(id);
 
-    return await this.userRepository.softDelete(id);
+      return await this.userRepository.softDelete(id);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 }
