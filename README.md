@@ -90,7 +90,7 @@ http://localhost:8080/api/swagger
 - Discord ID - victoroliveira7393
 - WhatsApp - [Victor Oliveira](https://wa.me/qr/LPRKOV2PPKMDC1)
 
-Quaisquer dúvidas estou a disposição 😃
+Quaisquer dúvidas estou a disposição 😃.
 ##  Tecnologias deste projeto
 
 [![Node.js](https://img.shields.io/badge/-Node.js-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
