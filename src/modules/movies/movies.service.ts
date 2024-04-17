@@ -21,11 +21,15 @@ export class MoviesService {
     private redisCache: RedisCacheService,
   ) {}
   async create(createMovieDto: CreateMovieDto) {
-    const movieData: IMovieModel = {
-      ...createMovieDto,
-    };
+    try {
+      const movieData: IMovieModel = {
+        ...createMovieDto,
+      };
 
-    return await this.movieRepository.save(movieData);
+      return await this.movieRepository.save(movieData);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   async findAll(): Promise<IMoviesResponseModel> {
@@ -65,15 +69,21 @@ export class MoviesService {
 
   async update(id: string, updateMovieDto: UpdateMovieDto) {
     try {
-      await this.findOne(id);
+      const movie = await this.findOne(id);
 
-      return await this.movieRepository.update(id, updateMovieDto);
+      this.movieRepository.merge(movie, updateMovieDto);
+
+      return await this.movieRepository.save(movie);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
   }
 
   async remove(id: string) {
-    return await this.movieRepository.softDelete(id);
+    try {
+      return await this.movieRepository.softDelete(id);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 }
