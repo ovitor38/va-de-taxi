@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsUUID } from 'class-validator';
 import {
   Entity,
@@ -17,15 +18,19 @@ export class MovieEntity {
   id: string;
 
   @Column({ length: 200 })
+  @ApiProperty()
   title: string;
 
   @Column({ name: 'release_date' })
+  @ApiProperty()
   released: Date;
 
   @Column()
+  @ApiProperty()
   director: string;
 
   @Column({ type: 'time' })
+  @ApiProperty()
   duration: Date;
 
   @CreateDateColumn({ name: 'created_at' })
