@@ -1,19 +1,34 @@
-import { Injectable } from '@nestjs/common';
-import { Redis } from 'ioredis';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import Redis from 'ioredis';
 
 @Injectable()
-export class RedisCacheService extends Redis {
+export class RedisCacheService {
+  private redis: Redis;
+  private redisURI: string;
+
   constructor() {
-    super();
+    process.env.ENV === 'PROD'
+      ? (this.redisURI = process.env.REDIS_URI)
+      : (this.redisURI = '');
+    this.redis = new Redis(this.redisURI);
+  }
 
-    super.on('error', (err) => {
-      console.log('Error on Redis');
-      console.log(err);
-      process.exit(1);
-    });
+  async set(key: string, value: string): Promise<void> {
+    try {
+      this.redis.set(key, value, 'EX', 300);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
 
-    super.on('connect', () => {
-      console.log('Redis connected!');
-    });
+  async get(key: string): Promise<string | null> {
+    try {
+      const result = await this.redis.get(key);
+      return result;
+    } catch (error) {
+      return null;
+    } finally {
+      this.redis.disconnect(true);
+    }
   }
 }

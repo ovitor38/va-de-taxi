@@ -43,7 +43,7 @@ export class MoviesService {
 
       const response = { totalMovies: movies.length, movies };
 
-      await this.redisCache.set('movies', JSON.stringify(response), 'EX', 15);
+      await this.redisCache.set('movies', JSON.stringify(response));
 
       return response;
     } catch (error) {
