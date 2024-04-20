@@ -10,7 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
-import { HasherAdapter } from 'src/adapters/hasher/hasher.adapter';
+import { HasherAdapter } from '../../adapters/hasher/hasher.adapter';
 
 @Injectable()
 export class UsersService {
