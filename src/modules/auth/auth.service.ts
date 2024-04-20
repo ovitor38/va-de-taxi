@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { UsersService } from '../users/users.service';
-import { HasherAdapter } from 'src/adapters/hasher/hasher.adapter';
+import { HasherAdapter } from '../../adapters/hasher/hasher.adapter';
 import { messagesErrorHelper } from 'src/helpers/messages.helper';
 
 @Injectable()
