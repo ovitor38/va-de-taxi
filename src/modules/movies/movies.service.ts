@@ -8,7 +8,7 @@ import { MovieEntity } from './entities/movie.entity';
 import { EntityNotFoundError, Repository } from 'typeorm';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { IMovieModel } from './models/movie.model';
-import { messagesErrorHelper } from 'src/helpers/messages.helper';
+import { messagesErrorHelper } from '../../helpers/messages.helper';
 import { IMoviesResponseModel } from './models/movies-response.model';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { RedisCacheService } from '../cache/redis/redis.service';

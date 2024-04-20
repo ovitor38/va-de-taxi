@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 
 import { UsersService } from '../users/users.service';
 import { HasherAdapter } from '../../adapters/hasher/hasher.adapter';
-import { messagesErrorHelper } from 'src/helpers/messages.helper';
+import { messagesErrorHelper } from '../../helpers/messages.helper';
 
 @Injectable()
 export class AuthService {
