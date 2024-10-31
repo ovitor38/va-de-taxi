@@ -46,7 +46,7 @@ lerna-debug.log*
 # temp directory
 .temp
 .tmp
-.postgres-data
+.mysql-data
 .redis-data
 
 # Runtime data
