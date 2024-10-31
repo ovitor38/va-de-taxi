@@ -4,7 +4,6 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  Generated,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
@@ -15,8 +14,8 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   @IsUUID()
   @ApiProperty()
-  @Generated('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column({ length: 200 })
   @ApiProperty()

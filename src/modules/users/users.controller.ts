@@ -31,8 +31,8 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Returns the user with the referenced id' })
   @ApiBearerAuth()
-  findOneOrFail(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  findOneOrFail(@Param('id') id: number) {
+    return this.usersService.findOne(+id);
   }
 
   @Patch('')
@@ -40,9 +40,9 @@ export class UsersController {
   @ApiOperation({ summary: 'Update the authenticated user' })
   @ApiBearerAuth()
   async update(@Req() req: Request, @Body() updateUserDto: UpdateUserDto) {
-    const id: string = req['user'].sub;
+    const id: number = req['user'].sub;
 
-    return await this.usersService.update(id, updateUserDto);
+    return await this.usersService.update(+id, updateUserDto);
   }
 
   @Delete('')
@@ -50,7 +50,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Delete the authenticated user' })
   @ApiBearerAuth()
   remove(@Req() req: Request) {
-    const id: string = req['user'].sub;
-    return this.usersService.remove(id);
+    const id: number = req['user'].sub;
+    return this.usersService.remove(+id);
   }
 }

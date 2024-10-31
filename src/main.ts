@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { UserExceptionFilter } from './common/filters/user-exception.filter';
 
 const options = { cors: true };
 const port = process.env.PORT || 8080;
@@ -10,6 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, options);
 
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new UserExceptionFilter());
 
   const config = new DocumentBuilder()
     .setTitle('Documentação com Swagger - MKS backend challenge')

@@ -1,92 +1,73 @@
-import {
-  ForbiddenException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
-import { EntityNotFoundError, Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserEntity } from './entities/user.entity';
 import { HasherAdapter } from '../../adapters/hasher/hasher.adapter';
+import { PrismaService } from 'src/db/prisma/prisma.service';
+import { UserResponseDto } from './dto/user-response.dto';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
-    private hasherAdapter: HasherAdapter,
+    private readonly prisma: PrismaService,
+    private readonly hasherAdapter: HasherAdapter,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    try {
-      const hashedPassword = await this.hasherAdapter.hash(
-        createUserDto.password,
-      );
+  async create(createUserDto: CreateUserDto): Promise<UserResponseDto> {
+    const hashedPassword = await this.hasherAdapter.hash(
+      createUserDto.password,
+    );
+    const user = { ...createUserDto, password: hashedPassword };
 
-      const user = { ...createUserDto, password: hashedPassword };
-
-      return await this.userRepository.save(user);
-    } catch (error) {
-      if (error.code == 23505 && error.constraint == 'users_email_key') {
-        throw new ForbiddenException(error.message.replace(/\\|"/g, ''));
-      }
-
-      throw new InternalServerErrorException(error.message);
-    }
+    return await this.prisma.user.create({
+      data: user,
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
   }
 
-  async findOne(id: string): Promise<UserEntity> {
-    try {
-      return await this.userRepository.findOneOrFail({
-        where: {
-          id,
-        },
-      });
-    } catch (error) {
-      if (error instanceof EntityNotFoundError) {
-        throw new NotFoundException({ message: 'User not found' });
-      }
-      throw new InternalServerErrorException(error.message);
-    }
+  async findOne(id: number): Promise<UserResponseDto> {
+    return await this.prisma.user.findFirstOrThrow({
+      where: { id },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
   }
 
-  async findOneByEmail(email: string): Promise<UserEntity> {
-    try {
-      return await this.userRepository.findOneOrFail({
-        where: {
-          email,
-        },
-      });
-    } catch (error) {
-      if (error instanceof EntityNotFoundError) {
-        throw new NotFoundException({ message: 'User not found' });
-      }
-      throw new InternalServerErrorException(error.message);
-    }
+  async findOneByEmail(email: string): Promise<User> {
+    return await this.prisma.user.findFirstOrThrow({
+      where: { email },
+    });
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<UserEntity> {
-    try {
-      const user = await this.findOne(id);
-
-      this.userRepository.merge(user, updateUserDto);
-
-      return await this.userRepository.save(user);
-    } catch (error) {
-      throw new InternalServerErrorException(error.message);
-    }
+  async update(
+    id: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserResponseDto> {
+    return await this.prisma.user.update({
+      where: { id },
+      data: updateUserDto,
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
   }
 
-  async remove(id: string) {
-    try {
-      await this.findOne(id);
-
-      return await this.userRepository.softDelete(id);
-    } catch (error) {
-      throw new InternalServerErrorException(error.message);
-    }
+  async remove(id: number) {
+    return await this.prisma.user.delete({ where: { id } });
   }
 }
