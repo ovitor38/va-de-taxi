@@ -19,6 +19,12 @@ export class AuthService {
   ): Promise<{ access_token: string }> {
     const user = await this.usersService.findOneByEmail(email);
 
+    if (!user) {
+      throw new UnauthorizedException({
+        message: messagesErrorHelper.PASSWORD_OR_EMAIL_INVALID,
+      });
+    }
+
     const samePassword = await this.hasherAdapter.compare(
       password,
       user.password,
