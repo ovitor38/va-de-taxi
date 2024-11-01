@@ -51,6 +51,8 @@ export class TaskService {
     });
   }
   async remove(id: number, userId: number) {
-    return this.prisma.task.delete({ where: { id, userId } });
+    await this.prisma.task.delete({ where: { id, userId } });
+
+    return 'Task deleted Succesfuly';
   }
 }

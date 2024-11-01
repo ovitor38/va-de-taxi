@@ -8,7 +8,13 @@ export class TaskResponseDto {
   title: string;
 
   @ApiProperty({ example: 'buy flowers at 18pm for my girlfriend' })
-  content: string;
+  description: string;
+
+  @ApiProperty({ example: false })
+  finished: boolean;
+
+  @ApiProperty({ example: 1 })
+  userId: number;
 
   @ApiProperty({ example: '2023-01-01T00:00:00Z' })
   createdAt: Date;
