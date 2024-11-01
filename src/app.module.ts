@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { PrismaModule } from './db/prisma/prisma.module';
+import { TaskModule } from './modules/task/task.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { PrismaModule } from './db/prisma/prisma.module';
     UsersModule,
     AuthModule,
     PrismaModule,
+    TaskModule,
   ],
   controllers: [],
   providers: [],

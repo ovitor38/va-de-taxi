@@ -4,6 +4,7 @@ import {
   ArgumentsHost,
   NotFoundException,
   UnauthorizedException,
+  BadRequestException,
 } from '@nestjs/common';
 import { Response } from 'express';
 
@@ -27,8 +28,11 @@ export class UserExceptionFilter implements ExceptionFilter {
     let status = 500;
     let message = 'Internal Server Error';
 
+    console.log(exception);
+
     if (
       exception instanceof UnauthorizedException ||
+      exception instanceof BadRequestException ||
       exception instanceof NotFoundException
     ) {
       status = exception.getStatus();
