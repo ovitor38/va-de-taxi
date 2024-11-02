@@ -1,16 +1,26 @@
+# Base image
 FROM node:18-alpine
 
-WORKDIR /app
+# Set the working directory
+WORKDIR /usr/src/app
 
-COPY package*.json ./
-
-RUN npm install
-
-COPY prisma ./prisma
+# Copy the application code
 COPY . .
 
+# Copy the .env file
+COPY .env .env
+
+# Install dependencies
+RUN npm install
+
+# Copy the application code
+COPY . .
+
+# Build the application
+RUN npm run build
+
+# Expose the application port
 EXPOSE 8080
 
-EXPOSE 3306
-
-CMD ["sh", "-c", "npx prisma generate --schema=./prisma/schema.prisma && npx prisma db push --schema=./prisma/schema.prisma && npm run start:prod"]
+# Command to run the application
+CMD ["npm", "run", "start:prod"]
