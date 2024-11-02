@@ -18,11 +18,9 @@
   <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
     <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
   <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+</p> 
 
-# MKS Backend Challene, este é o meu resultado do desafio proposto pela MKS. Essa API consiste em sistema CRUD de filmes. Nele foram utilizadas as seguintes tecnologias: Nestjs, TypeORM, Swagger, Docker, Redis e PostgreSQL.
+# ORIT RH Backend TESTE, este é o meu resultado do desafio proposto pela ORIT. Essa API consiste em sistema CRUD de Tasks. Nele foram utilizadas as seguintes tecnologias: Nestjs, TypeORM, Swagger, Docker, Redis e MySQL.
 
 ## Descrição 
 Nessa API foram aplicados conceitos principais do SOLID, para que possa ser de fácil sua mantenabilidade e escalabilidade. Buscando sempre pelo melhor padrão utilizado na área de desenvolvimento
@@ -38,44 +36,49 @@ O projeto segue a famosa arquitetura MVC, com a CLI do NESTJs a criação desse 
 -**Crud Usários**
   - A API permite a criação de usuários requirindo: nome, email e uma senha, nas funcionalidades da rota de usuários todas as rotas são protegidas por autenficação JWT (exceto a de criação), essa proteção serve que apenas o usuário autenticado modifique ou exclua os seus dados
 
--**CRUD Filmes**
-  - É possível criar, ler, atualizar e excluir filmes através da API de forma simples. Um registro consiste em nome, duração, direção e ano de lançamento. Para garantir a segurança e seguindo um dos requistos desse desafio todas as rotas de filmes estão protegidas por JWT
+-**CRUD Tasks**
+  - É possível criar, ler, atualizar e excluir tasks através da API de forma simples. Um registro consiste em titulo e descrição. Para garantir a segurança e seguindo um dos requistos desse desafio todas as rotas de filmes estão protegidas por JWT
 
 
-### Tecnologias Complementares
+### Tecnologias Utilizadas
 
-- **Docker:** O projeto utiliza Docker, as imagens tanto do Postgres quanto do Redis estão contidas nele. Dessa forma o projeto pode ser facilmente executado por outros desenvolvedores sendo desnecessários a instalação desses aplicativos em seu ambiente de desenvolvimento
+- **BullMQ:**: A fim de tornar a aplicação mais rápida e versátil foi utilizado o BullMQ, seu sistema de mensageria permite que tarefas mais complexas sejam executadas sem que a aplicação fique travada
+- **Docker:** O projeto utiliza Docker, as imagens tanto do MySQL quanto do Redis estão contidas nele. Dessa forma o projeto pode ser facilmente executado por outros desenvolvedores sendo desnecessários a instalação desses aplicativos em seu ambiente de desenvolvimento
+- **Prisma:** Nessa aplicação também foi utilizado o prisma ORM. Com essa lib o facilidade de desenvolvimento se torna uma grande aliada, pois dispensa uso de querys, para realizar operações simples.
 - **Commit-lint:** Para garantir uma padronização nos commit foi utilizado está lib que garante que não possa ser feitos commit que fujam do padrão estabelicidos nas configurações prévias estabelecidas 
 - **Swagger:** Utilizado para realizar a documentação de todos os endpoint da aplicação
-- **Redis:** Como maneira de melhoria na performance foi utilizado Redis para buscar dados que são frequentemente utilizados, fazendo com a API não demande tantas requisições ao banco de dados, fazendo com que tenha seu desempenho melhorado 
+- **Redis:** Como maneira de melhoria na performance foi utilizado Redis para buscar dados que são frequentemente utilizados, fazendo com a API não demande tantas requisições ao banco de dados, fazendo com que tenha seu desempenho melhorado
 
-## Installation
+## Instalação
 
-```bash
-$ yarn install
+Após clonar o projeto é necessário criar um arquivo .env na raiz do mesmo, após isso copie tudo de .env.example para esse novo arquivo.
+
+Toda a aplicação está contenerizada, a fim de facilitar o uso da mesma em qualquer máquina que tenha o Docker instalado
+
+Para iniciar a aplicação basta rodar o seguinte comando:
+
 ```
-### Obs: Caso esteja rodando a aplicação pela primeira vez e tenha intuito de realizar novos commits é necessário rodar o comando, a fim de garantir que os hooks sejam executados
-```bash
-$ yarn prepare
+docker-compose run app npx prisma generate && npx prisma db push && npm run start:prod
 ```
 
-## Running the app
+Com o container iniciado basta utilizar a porta **8080** para acessar a aplicação.
+Toda a documentação está disponível em:
 
-```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
 ```
+localhost/api/swagger
+```
+
+## Testes
+ Para ter uma aplicação funcional e evitar bugs. Foi utilizado o Jest que já vem nativamente no NestJS.
+ Para executa-los basta rodar o comando
+ ```
+ npm run test
+ ```
+
 ## Desenvolvimento e Experiência
-Durante o desenvolvimento desse projeto houve muito comprometimento de minha parte, já estava bem familiarizado com a maioria das tecnologias principalmente Typescript e Postgres. Uma novidade para mim foi utilizar o Redis como sistema de cache já que nunca havia usado anteriormente em meus projetos, entretando com algumas horas dedicado a documentação pude aplicar facilmente.
-Infelizmente não houve tempo hábil para concluir os testes unitários e de integração, devido isso removi todos os arquivos para esse propósito. Entretanto todos os endpoints foram devidamente validados via Postman.
+Durante o desenvolvimento desse projeto houve muito comprometimento de minha parte, já estava bem familiarizado com a maioria das tecnologias principalmente Typescript e Docker.
 
-TypeScript, swagger, docker e Postgres são ferramentas que eu utilizava sempre na minha antiga experiência profissional. Já o NestJs, venho estudando ele há algum tempo (cerca de 2 meses) e o Redis é uma novidade para mim, porém foi algo simples de se utilizar
+TypeScript, swagger, docker e banco relacionais são ferramentas que eu utilizava sempre na minha antiga experiência profissional. Já o NestJs, venho estudando ele há algum tempo (cerca de 2 meses) e o Redis é uma novidade para mim, porém foi algo simples de se utilizar
 
 ## Documentação no Swagger
 ```bash
@@ -96,10 +99,8 @@ Quaisquer dúvidas estou a disposição 😃.
 [![Node.js](https://img.shields.io/badge/-Node.js-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/-TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![NestJS](https://img.shields.io/badge/-NestJS-E0234E?style=flat-square&logo=nestjs&logoColor=white)](https://nestjs.com/)
-[![TypeORM](https://img.shields.io/badge/-TypeORM-F37626?style=flat-square&logo=typeorm&logoColor=white)](https://typeorm.io/)
 [![Swagger](https://img.shields.io/badge/-Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=black)](https://swagger.io/)
 [![Docker](https://img.shields.io/badge/-Docker-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
 [![Redis](https://img.shields.io/badge/-Redis-DC382D?style=flat-square&logo=redis&logoColor=white)](https://redis.io/)
-[![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-336791?style=flat-square&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![git](https://img.shields.io/badge/-git-F05032?style=flat-square&logo=git&logoColor=white)](https://git-scm.com/)
 [![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/)
