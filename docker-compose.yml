@@ -1,6 +1,7 @@
 version: '3.8'
 
-services:
+services: 
+    
   mysql:
     image: mysql:8.0
     container_name: orit-mysql-db
@@ -18,3 +19,17 @@ services:
     restart: always
     ports:
       - '6379:6379'
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    depends_on:
+      - mysql
+      - redis
+    volumes:
+      - .:/app
+      - /app/node_modules
