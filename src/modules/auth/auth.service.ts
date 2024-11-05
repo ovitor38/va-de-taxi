@@ -1,14 +1,16 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { UsersService } from '../users/users.service';
 import { HasherAdapter } from '../../adapters/hasher/hasher.adapter';
 import { messagesErrorHelper } from '../../helpers/messages.helper';
+import { PassengerService } from '../passenger/passenger.service';
+import { DriverService } from '../driver/driver.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    private readonly passengerService: PassengerService,
+    private readonly driverService: DriverService,
     private jwtService: JwtService,
     private hasherAdapter: HasherAdapter,
   ) {}
@@ -17,7 +19,9 @@ export class AuthService {
     email: string,
     password: string,
   ): Promise<{ access_token: string }> {
-    const user = await this.usersService.findOneByEmail(email);
+    const user =
+      (await this.passengerService.findOneByEmail(email)) ||
+      (await this.driverService.findOneByEmail(email));
 
     if (!user) {
       throw new UnauthorizedException({

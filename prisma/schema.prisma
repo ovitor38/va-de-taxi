@@ -7,23 +7,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Passenger {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String?
+  phone     String
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  task      Task[]
+  Ride      Ride[]
 }
 
-model Task {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String?
-  finished    Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  userId      Int?
-  user        User?    @relation(fields: [userId], references: [id])
+model Driver {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  name         String?
+  phone        String
+  password     String
+  licensePlate String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  ride         Ride[]
+}
+
+model Ride {
+  id          Int       @id @default(autoincrement())
+  status      String
+  origin      String
+  destiny     String
+  requestDate DateTime  @default(now())
+  startDate   DateTime
+  finishDate  DateTime  @updatedAt
+  driverId    Int
+  driver      Driver    @relation(fields: [driverId], references: [id])
+  passengerId Int
+  passenger   Passenger @relation(fields: [passengerId], references: [id])
 }
