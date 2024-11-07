@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePassengerDto } from './dto/create-passenger.dto';
-import { UpdatePassengerDto } from './dto/update-passenger.dto';
 import { PrismaService } from 'src/db/prisma/prisma.service';
 import { HasherAdapter } from 'src/adapters/hasher/hasher.adapter';
+import { UpdatePassengerDto } from './dto/update-passenger.dto';
 
 @Injectable()
 export class PassengerService {
@@ -16,14 +16,14 @@ export class PassengerService {
       createPassengerDto.password,
     );
 
-    const passenger = await this.prisma.passenger.create(
-      ...createPassengerDto,
-      hashedPassword,
-    );
-  }
+    const passengerDto = { ...createPassengerDto, password: hashedPassword };
 
-  findAll() {
-    return `This action returns all passenger`;
+    const passenger = await this.prisma.passenger.create({
+      data: passengerDto,
+      select: { id: true, email: true, name: true, phone: true },
+    });
+
+    return passenger;
   }
 
   async findOneByEmail(email: string) {
@@ -32,11 +32,16 @@ export class PassengerService {
     });
   }
 
-  update(id: number, updatePassengerDto: UpdatePassengerDto) {
-    return `This action updates a #${id} passenger`;
+  async update(id: number, updatePassengerDto: UpdatePassengerDto) {
+    const passengerUpdated = await this.prisma.passenger.update({
+      where: { id },
+      data: updatePassengerDto,
+    });
+
+    return passengerUpdated;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} passenger`;
+  async delete(id: number) {
+    await this.prisma.passenger.delete({ where: { id } });
   }
 }

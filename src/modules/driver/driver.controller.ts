@@ -1,34 +1,51 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { DriverService } from './driver.service';
 import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../auth/auth.guard';
 
-@Controller('driver')
+@Controller('api/driver')
+@ApiTags('Driver')
 export class DriverController {
   constructor(private readonly driverService: DriverService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create a new Driver' })
   create(@Body() createDriverDto: CreateDriverDto) {
     return this.driverService.create(createDriverDto);
   }
 
-  @Get()
-  findAll() {
-    return this.driverService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.driverService.findOne(+id);
+  @Get(':email')
+  findOne(@Param('email') email: string) {
+    return this.driverService.findOneByEmail(email);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDriverDto: UpdateDriverDto) {
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Update the authenticated Driver' })
+  @ApiBearerAuth()
+  update(@Req() req: Request, @Body() updateDriverDto: UpdateDriverDto) {
+    const id: number = req['user'].sub;
     return this.driverService.update(+id, updateDriverDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'delete the authenticated Driver' })
+  @ApiBearerAuth()
+  remove(@Req() req: Request) {
+    const id: number = req['user'].sub;
     return this.driverService.remove(+id);
   }
 }

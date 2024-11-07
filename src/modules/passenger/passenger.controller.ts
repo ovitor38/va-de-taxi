@@ -1,34 +1,50 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { PassengerService } from './passenger.service';
 import { CreatePassengerDto } from './dto/create-passenger.dto';
 import { UpdatePassengerDto } from './dto/update-passenger.dto';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../auth/auth.guard';
 
-@Controller('passenger')
+@Controller('api/passenger')
+@ApiTags('Passenger')
 export class PassengerController {
   constructor(private readonly passengerService: PassengerService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create a new Passenger' })
   create(@Body() createPassengerDto: CreatePassengerDto) {
     return this.passengerService.create(createPassengerDto);
   }
 
-  @Get()
-  findAll() {
-    return this.passengerService.findAll();
+  @Get(':email')
+  findOne(@Param('email') email: string) {
+    return this.passengerService.findOneByEmail(email);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.passengerService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePassengerDto: UpdatePassengerDto) {
+  @Patch()
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Update the authenticated Passenger' })
+  @ApiBearerAuth()
+  update(@Req() req: Request, @Body() updatePassengerDto: UpdatePassengerDto) {
+    const id: number = req['user'].sub;
     return this.passengerService.update(+id, updatePassengerDto);
   }
 
-  @Delete(':id')
+  @Delete()
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'delete the authenticated Passenger' })
+  @ApiBearerAuth()
   remove(@Param('id') id: string) {
-    return this.passengerService.remove(+id);
+    return this.passengerService.delete(+id);
   }
 }

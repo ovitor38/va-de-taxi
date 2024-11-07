@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -31,15 +31,21 @@ model Driver {
 }
 
 model Ride {
-  id          Int       @id @default(autoincrement())
-  status      String
+  id          Int        @id @default(autoincrement())
+  status      StatusRide @default(AGUARDANDO_MOTORISTA)
   origin      String
   destiny     String
-  requestDate DateTime  @default(now())
+  requestDate DateTime   @default(now())
   startDate   DateTime
-  finishDate  DateTime  @updatedAt
+  finishDate  DateTime   @updatedAt
   driverId    Int
-  driver      Driver    @relation(fields: [driverId], references: [id])
+  driver      Driver     @relation(fields: [driverId], references: [id])
   passengerId Int
-  passenger   Passenger @relation(fields: [passengerId], references: [id])
+  passenger   Passenger  @relation(fields: [passengerId], references: [id])
+}
+
+enum StatusRide {
+  AGUARDANDO_MOTORISTA
+  EM_ANDAMENTO
+  FINALIZADA
 }
