@@ -36,10 +36,10 @@ model Ride {
   origin      String
   destiny     String
   requestDate DateTime   @default(now())
-  startDate   DateTime
-  finishDate  DateTime   @updatedAt
-  driverId    Int
-  driver      Driver     @relation(fields: [driverId], references: [id])
+  startDate   DateTime?  // Este campo deve permitir null
+  finishDate  DateTime?  // Este campo também
+  driverId    Int?       // Torne esse campo opcional
+  driver      Driver?    @relation(fields: [driverId], references: [id])
   passengerId Int
   passenger   Passenger  @relation(fields: [passengerId], references: [id])
 }

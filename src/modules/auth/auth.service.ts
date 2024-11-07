@@ -3,14 +3,14 @@ import { JwtService } from '@nestjs/jwt';
 
 import { HasherAdapter } from '../../adapters/hasher/hasher.adapter';
 import { messagesErrorHelper } from '../../helpers/messages.helper';
-import { PassengerService } from '../passenger/passenger.service';
 import { DriverService } from '../driver/driver.service';
+import { PassengerService } from '../passenger/passenger.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly passengerService: PassengerService,
-    private readonly driverService: DriverService,
+    private driverService: DriverService,
+    private passengerService: PassengerService,
     private jwtService: JwtService,
     private hasherAdapter: HasherAdapter,
   ) {}
