@@ -5,6 +5,7 @@ import { HasherAdapter } from '../../adapters/hasher/hasher.adapter';
 import { messagesErrorHelper } from '../../helpers/messages.helper';
 import { DriverService } from '../driver/driver.service';
 import { PassengerService } from '../passenger/passenger.service';
+import { Driver, Passenger } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -18,10 +19,15 @@ export class AuthService {
   async signIn(
     email: string,
     password: string,
+    isDriver: boolean,
   ): Promise<{ access_token: string }> {
-    const user =
-      (await this.passengerService.findOneByEmail(email)) ||
-      (await this.driverService.findOneByEmail(email));
+    let user: Passenger | Driver;
+
+    if (isDriver) {
+      user = await this.driverService.findOneByEmail(email);
+    } else {
+      user = await this.passengerService.findOneByEmail(email);
+    }
 
     if (!user) {
       throw new UnauthorizedException({
