@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Get } from '@nestjs/common';
 import { RideService } from './ride.service';
 import { CreateRideDto } from './dto/create-ride.dto';
 import { UpdateRideDto } from './dto/update-ride.dto';
@@ -15,5 +15,10 @@ export class RideController {
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateRideDto: UpdateRideDto) {
     return this.rideService.update(+id, updateRideDto);
+  }
+
+  @Get(':id')
+  getOne(@Param('id') id: number) {
+    return this.rideService.getOne(+id);
   }
 }
