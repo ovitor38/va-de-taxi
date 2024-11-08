@@ -3,6 +3,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsPhoneNumber,
+  IsString,
   Length,
   MinLength,
 } from 'class-validator';
@@ -15,6 +16,7 @@ export class CreateDriverDto {
 
   @ApiProperty()
   @IsNotEmpty()
+  @IsString()
   @Length(3, 200)
   name: string;
 

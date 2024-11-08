@@ -32,6 +32,12 @@ export class PassengerService {
     });
   }
 
+  async findOne(id: number) {
+    return await this.prisma.passenger.findFirstOrThrow({
+      where: { id },
+    });
+  }
+
   async update(id: number, updatePassengerDto: UpdatePassengerDto) {
     const passengerUpdated = await this.prisma.passenger.update({
       where: { id },

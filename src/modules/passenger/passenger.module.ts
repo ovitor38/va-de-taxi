@@ -7,5 +7,6 @@ import { HasherAdapterModule } from 'src/adapters/hasher/hasher.module';
   imports: [HasherAdapterModule],
   controllers: [PassengerController],
   providers: [PassengerService],
+  exports: [PassengerService],
 })
 export class PassengerModule {}
