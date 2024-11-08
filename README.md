@@ -20,7 +20,7 @@
   <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
 </p> 
 
-# ORIT RH Backend TESTE, este é o meu resultado do desafio proposto pela ORIT. Essa API consiste em sistema CRUD de Tasks. Nele foram utilizadas as seguintes tecnologias: Nestjs, TypeORM, Swagger, Docker, Redis e MySQL.
+# Va de Taxi Backend TESTE, este é o meu resultado do desafio proposto pela Va de Taxi. Essa API tem como finalidade gerenciar corridas de táxi, onde passageiros podem solicitar corridas e motoristas podem iniciar e finalizar essas corridas. Nele foram utilizadas as seguintes tecnologias: NodeJs, Nestjs, Prisma, Swagger, Docker e Postgres.
 
 ## Descrição 
 Nessa API foram aplicados conceitos principais do SOLID, para que possa ser de fácil sua mantenabilidade e escalabilidade. Buscando sempre pelo melhor padrão utilizado na área de desenvolvimento
@@ -33,21 +33,24 @@ O projeto segue a famosa arquitetura MVC, com a CLI do NESTJs a criação desse 
 -**Autenticação de Usuários**
   - A autenticação é feita através do email e senha do usuário, com isso a API é capaz de retornar um token JWT que lhe garantira acesso as demais funcionalidades
 
--**Crud Usários**
-  - A API permite a criação de usuários requirindo: nome, email e uma senha, nas funcionalidades da rota de usuários todas as rotas são protegidas por autenficação JWT (exceto a de criação), essa proteção serve que apenas o usuário autenticado modifique ou exclua os seus dados
+-**Crud Passageiros**
+  - A API permite a criação de passagerios requirindo: nome, email, senha e telefone. Todas os métodos da rota de passageiros todas as rotas são protegidas por autenficação JWT (exceto a de criação), essa proteção serve que apenas o usuário autenticado modifique ou exclua os seus dados
 
--**CRUD Tasks**
-  - É possível criar, ler, atualizar e excluir tasks através da API de forma simples. Um registro consiste em titulo e descrição. Para garantir a segurança e seguindo um dos requistos desse desafio todas as rotas de filmes estão protegidas por JWT
+-**Crud Passageiros**
+  - O Crud de Motoristas funciona de forma igual ao de passageiros, a unica diferença é que foi adicionado um campo a mais que seria CARRO ( na tabela do banco equivale a licencePlate)
 
+-**Criação, Atualização e Leitura de viagens (ride)**
+  - É possível criar, atualizar e let todas as vigens cadastradas no banco através da API de forma simples
 
 ### Tecnologias Utilizadas
 
-- **BullMQ:**: A fim de tornar a aplicação mais rápida e versátil foi utilizado o BullMQ, seu sistema de mensageria permite que tarefas mais complexas sejam executadas sem que a aplicação fique travada
-- **Docker:** O projeto utiliza Docker, as imagens tanto do MySQL quanto do Redis estão contidas nele. Dessa forma o projeto pode ser facilmente executado por outros desenvolvedores sendo desnecessários a instalação desses aplicativos em seu ambiente de desenvolvimento
+
+- **NestJs:** Foi utilizado  esse framework pois o mesmo possibilita rápida curva de aprendizagem e além disso o desenvolvimento fica muito mais dinamica graças as suas funcionalidades, Decorators e uma CLI muito útil
+- **Docker:** O projeto utiliza Docker para iniciar a imagem do Banco de dados e rodar a aplicação dentro do prórpio container. Dessa forma o projeto pode ser facilmente executado por outros desenvolvedores sendo desnecessários a instalação desses aplicativos em seu ambiente de desenvolvimento
 - **Prisma:** Nessa aplicação também foi utilizado o prisma ORM. Com essa lib o facilidade de desenvolvimento se torna uma grande aliada, pois dispensa uso de querys, para realizar operações simples.
 - **Commit-lint:** Para garantir uma padronização nos commit foi utilizado está lib que garante que não possa ser feitos commit que fujam do padrão estabelicidos nas configurações prévias estabelecidas 
 - **Swagger:** Utilizado para realizar a documentação de todos os endpoint da aplicação
-- **Redis:** Como maneira de melhoria na performance foi utilizado Redis para buscar dados que são frequentemente utilizados, fazendo com a API não demande tantas requisições ao banco de dados, fazendo com que tenha seu desempenho melhorado
+
 
 ## Instalação
 
@@ -78,7 +81,7 @@ localhost/api/swagger
 ## Desenvolvimento e Experiência
 Durante o desenvolvimento desse projeto houve muito comprometimento de minha parte, já estava bem familiarizado com a maioria das tecnologias principalmente Typescript e Docker.
 
-TypeScript, swagger, docker e banco relacionais são ferramentas que eu utilizava sempre na minha antiga experiência profissional. Já o NestJs, venho estudando ele há algum tempo (cerca de 2 meses) e o Redis é uma novidade para mim, porém foi algo simples de se utilizar
+TypeScript, swagger, docker e banco relacionais são ferramentas que eu utilizava sempre na minha antiga experiência profissional. Já o NestJs, venho estudando ele há algum tempo (cerca de 4 meses)
 
 ## Documentação no Swagger
 ```bash
