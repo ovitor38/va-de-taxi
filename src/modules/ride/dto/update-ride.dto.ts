@@ -1,11 +1,14 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateRideDto } from './create-ride.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsNumber, IsOptional } from 'class-validator';
+import { StatusRide } from 'src/common/constants';
 
-enum StatusRide {
-  inProgress = 'EM_ANDAMENTO',
-  finishe = 'FINALIZADA',
-}
-export class UpdateRideDto extends PartialType(CreateRideDto) {
-  driverId: string;
+export class UpdateRideDto {
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  driverId: number;
+
+  @ApiProperty()
+  @IsEnum(StatusRide)
   status: StatusRide;
 }

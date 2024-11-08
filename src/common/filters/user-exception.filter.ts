@@ -5,6 +5,7 @@ import {
   NotFoundException,
   UnauthorizedException,
   BadRequestException,
+  PreconditionFailedException,
 } from '@nestjs/common';
 import { Response } from 'express';
 
@@ -21,6 +22,7 @@ export class UserExceptionFilter implements ExceptionFilter {
     const statusMapping: Record<string, [number, string]> = {
       UnauthorizedException: [401, 'Access denied'],
       NotFoundException: [404, 'Resource not found'],
+      PreconditionFailedException: [412, 'Precondition Failed'],
       P2002: [403, 'Email already in use'],
       P2025: [404, 'User not found'],
     };
@@ -31,6 +33,7 @@ export class UserExceptionFilter implements ExceptionFilter {
     console.log(exception);
 
     if (
+      exception instanceof PreconditionFailedException ||
       exception instanceof UnauthorizedException ||
       exception instanceof BadRequestException ||
       exception instanceof NotFoundException
