@@ -14,15 +14,15 @@ async function bootstrap() {
   app.useGlobalFilters(new UserExceptionFilter());
 
   const config = new DocumentBuilder()
-    .setTitle('Documentação com Swagger - Orit Test')
+    .setTitle('Documentação com Swagger - Va de taxi Test')
     .setDescription(
       'O Swagger (aka OpenApi) é uma biblioteca muito conhecida no universo backend, estando disponível para diversas linguagens e frameworks. Ela gera um site interno no seu backend que descreve, com muitos detalhes, cada endpoint e estrutura de entidades presentes na sua aplicação.',
     )
     .setVersion('1.0')
-    .addTag('users')
+    .addTag('passenger')
+    .addTag('driver')
     .addTag('auth')
     .addBearerAuth()
-    .addTag('task')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

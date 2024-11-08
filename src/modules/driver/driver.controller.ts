@@ -14,7 +14,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('api/driver')
-@ApiTags('Driver')
+@ApiTags('driver')
 export class DriverController {
   constructor(private readonly driverService: DriverService) {}
 
