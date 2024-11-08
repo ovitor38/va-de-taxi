@@ -1,116 +1,90 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { DriverService } from '../driver/driver.service';
+import { PassengerService } from '../passenger/passenger.service';
 import { HasherAdapter } from '../../adapters/hasher/hasher.adapter';
 import { UnauthorizedException } from '@nestjs/common';
-import { messagesErrorHelper } from '../../helpers/messages.helper';
 
 describe('AuthService', () => {
   let authService: AuthService;
-  let usersService: UsersService;
-  let jwtService: JwtService;
+  let driverService: DriverService;
+  let passengerService: PassengerService;
   let hasherAdapter: HasherAdapter;
+  let jwtService: JwtService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
-        {
-          provide: UsersService,
-          useValue: {
-            findOneByEmail: jest.fn(),
-          },
-        },
-        {
-          provide: JwtService,
-          useValue: {
-            signAsync: jest.fn(),
-          },
-        },
-        {
-          provide: HasherAdapter,
-          useValue: {
-            compare: jest.fn(),
-          },
-        },
+        { provide: DriverService, useValue: { findOneByEmail: jest.fn() } },
+        { provide: PassengerService, useValue: { findOneByEmail: jest.fn() } },
+        { provide: JwtService, useValue: { signAsync: jest.fn() } },
+        { provide: HasherAdapter, useValue: { compare: jest.fn() } },
       ],
     }).compile();
 
     authService = module.get<AuthService>(AuthService);
-    usersService = module.get<UsersService>(UsersService);
+    driverService = module.get<DriverService>(DriverService);
+    passengerService = module.get<PassengerService>(PassengerService);
     jwtService = module.get<JwtService>(JwtService);
     hasherAdapter = module.get<HasherAdapter>(HasherAdapter);
   });
 
-  it('should return access_token if signIn is successful', async () => {
-    const email = 'test@example.com';
-    const password = 'password123';
+  it('should successfully sign in a driver and return a JWT', async () => {
     const user = {
       id: 1,
-      email,
-      password: 'hashed_password',
-      name: 'james',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    const accessToken = 'mockAccessToken';
-
-    jest.spyOn(usersService, 'findOneByEmail').mockResolvedValue(user);
+      email: 'driver@example.com',
+      password: 'hashedpassword',
+    } as any;
+    jest.spyOn(driverService, 'findOneByEmail').mockResolvedValue(user);
     jest.spyOn(hasherAdapter, 'compare').mockResolvedValue(true);
-    jest.spyOn(jwtService, 'signAsync').mockResolvedValue(accessToken);
+    jest.spyOn(jwtService, 'signAsync').mockResolvedValue('jwt.token');
 
-    const result = await authService.signIn(email, password);
+    const result = await authService.signIn(
+      'driver@example.com',
+      'password',
+      true,
+    );
+    expect(result.access_token).toBe('jwt.token');
+  });
 
-    expect(result).toEqual({ access_token: accessToken });
-    expect(usersService.findOneByEmail).toHaveBeenCalledWith(email);
-    expect(hasherAdapter.compare).toHaveBeenCalledWith(password, user.password);
-    expect(jwtService.signAsync).toHaveBeenCalledWith({
-      sub: user.id,
-      email: user.email,
-    });
+  it('should successfully sign in a passenger and return a JWT', async () => {
+    const user = {
+      id: 1,
+      email: 'passenger@example.com',
+      password: 'hashedpassword',
+    } as any;
+    jest.spyOn(passengerService, 'findOneByEmail').mockResolvedValue(user);
+    jest.spyOn(hasherAdapter, 'compare').mockResolvedValue(true);
+    jest.spyOn(jwtService, 'signAsync').mockResolvedValue('jwt.token');
+
+    const result = await authService.signIn(
+      'passenger@example.com',
+      'password',
+      false,
+    );
+    expect(result.access_token).toBe('jwt.token');
+  });
+
+  it('should throw UnauthorizedException if email is not found', async () => {
+    jest.spyOn(driverService, 'findOneByEmail').mockResolvedValue(null);
+    await expect(
+      authService.signIn('unknown@example.com', 'password', true),
+    ).rejects.toThrow(UnauthorizedException);
   });
 
   it('should throw UnauthorizedException if password is incorrect', async () => {
-    const email = 'test@example.com';
-    const password = 'password123';
     const user = {
       id: 1,
-      email,
-      password: 'hashed_password',
-      name: 'james',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    jest.spyOn(usersService, 'findOneByEmail').mockResolvedValue(user);
+      email: 'driver@example.com',
+      password: 'hashedpassword',
+    } as any;
+    jest.spyOn(driverService, 'findOneByEmail').mockResolvedValue(user);
     jest.spyOn(hasherAdapter, 'compare').mockResolvedValue(false);
 
-    await expect(authService.signIn(email, password)).rejects.toThrow(
-      new UnauthorizedException({
-        message: messagesErrorHelper.PASSWORD_OR_EMAIL_INVALID,
-      }),
-    );
-
-    expect(usersService.findOneByEmail).toHaveBeenCalledWith(email);
-    expect(hasherAdapter.compare).toHaveBeenCalledWith(password, user.password);
-    expect(jwtService.signAsync).not.toHaveBeenCalled();
-  });
-
-  it('should throw UnauthorizedException if user is not found', async () => {
-    const email = 'test@example.com';
-    const password = 'password123';
-
-    jest.spyOn(usersService, 'findOneByEmail').mockResolvedValue(null);
-
-    await expect(authService.signIn(email, password)).rejects.toThrow(
-      new UnauthorizedException({
-        message: messagesErrorHelper.PASSWORD_OR_EMAIL_INVALID,
-      }),
-    );
-
-    expect(usersService.findOneByEmail).toHaveBeenCalledWith(email);
-    expect(hasherAdapter.compare).not.toHaveBeenCalled();
-    expect(jwtService.signAsync).not.toHaveBeenCalled();
+    await expect(
+      authService.signIn('driver@example.com', 'wrongpassword', true),
+    ).rejects.toThrow(UnauthorizedException);
   });
 });

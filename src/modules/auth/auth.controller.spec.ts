@@ -30,16 +30,19 @@ describe('AuthController', () => {
       email: 'test@example.com',
       password: 'password123',
     };
+
+    const isDriver = false;
     const accessToken = { access_token: 'mockAccessToken' };
 
     jest.spyOn(authService, 'signIn').mockResolvedValue(accessToken);
 
-    const result = await authController.signIn(signInDto);
+    const result = await authController.signIn(signInDto, isDriver);
 
     expect(result).toEqual(accessToken);
     expect(authService.signIn).toHaveBeenCalledWith(
       signInDto.email,
       signInDto.password,
+      isDriver,
     );
   });
 
@@ -48,17 +51,19 @@ describe('AuthController', () => {
       email: 'test@example.com',
       password: 'wrongpassword',
     };
+    const isDriver = false;
 
     jest
       .spyOn(authService, 'signIn')
       .mockRejectedValue(new UnauthorizedException());
 
-    await expect(authController.signIn(signInDto)).rejects.toThrow(
+    await expect(authController.signIn(signInDto, isDriver)).rejects.toThrow(
       UnauthorizedException,
     );
     expect(authService.signIn).toHaveBeenCalledWith(
       signInDto.email,
       signInDto.password,
+      isDriver,
     );
   });
 });
