@@ -2,8 +2,6 @@ FROM node:18-alpine
 
 WORKDIR /usr/src/app
 
-COPY . .
-
 COPY .env .env
 
 RUN npm install
