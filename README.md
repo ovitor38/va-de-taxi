@@ -52,7 +52,7 @@ O projeto segue a famosa arquitetura MVC, com a CLI do NESTJs a criação desse 
 - **Swagger:** Utilizado para realizar a documentação de todos os endpoint da aplicação
 
 
-## Instalação
+## Instalação e instruções de uso
 
 Após clonar o projeto é necessário criar um arquivo .env na raiz do mesmo, após isso copie tudo de .env.example para esse novo arquivo.
 
