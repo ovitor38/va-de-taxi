@@ -7,5 +7,6 @@ import { HasherAdapterModule } from 'src/adapters/hasher/hasher.module';
   imports: [HasherAdapterModule],
   controllers: [DriverController],
   providers: [DriverService],
+  exports: [DriverService],
 })
 export class DriverModule {}

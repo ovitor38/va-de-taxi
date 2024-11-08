@@ -1,10 +1,8 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
   Patch,
-  Param,
   Delete,
   UseGuards,
   Req,
@@ -24,11 +22,6 @@ export class DriverController {
   @ApiOperation({ summary: 'Create a new Driver' })
   create(@Body() createDriverDto: CreateDriverDto) {
     return this.driverService.create(createDriverDto);
-  }
-
-  @Get(':email')
-  findOne(@Param('email') email: string) {
-    return this.driverService.findOneByEmail(email);
   }
 
   @Patch(':id')

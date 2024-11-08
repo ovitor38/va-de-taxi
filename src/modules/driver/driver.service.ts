@@ -39,6 +39,10 @@ export class DriverService {
     return await this.prisma.driver.findFirstOrThrow({ where: { email } });
   }
 
+  async findOne(id: number) {
+    return await this.prisma.driver.findFirstOrThrow({ where: { id } });
+  }
+
   async update(id: number, updateDriverDto: UpdateDriverDto) {
     return await this.prisma.driver.update({
       where: { id },
