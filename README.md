@@ -61,8 +61,10 @@ Toda a aplicação está contenerizada, a fim de facilitar o uso da mesma em qua
 Para iniciar a aplicação basta rodar o seguinte comando:
 
 ```
-docker-compose run app npx prisma generate && npx prisma db push && npm run start:prod
+docker-compose up --build
 ```
+
+Para acessar o banco de dados utilize a ferramenta de gestão que preferir (dbeaver, pgadmin, etc...) e utilize a porta 5433
 
 Com o container iniciado basta utilizar a porta **8080** para acessar a aplicação.
 Toda a documentação está disponível em:
